@@ -1,461 +1,459 @@
-# AutoFuzzLLM
-AutoFuzzLLM — Agentic LLM Security Fuzzer
+# 🛡️ AutoFuzzLLM — Agentic LLM Security Fuzzer
 
-AutoFuzzLLM is an agentic security testing framework for Large Language Models (LLMs). It automatically generates adversarial prompt mutations, sends them to one or more LLM providers, evaluates the responses for potential security risks, maps attack categories to OWASP LLM risks, and presents the results through an interactive Streamlit dashboard.
+AutoFuzzLLM is an **agentic security testing framework for Large Language Models (LLMs)**. It automatically generates adversarial prompt mutations, sends them to multiple LLM providers, evaluates responses for potential security risks, maps attack categories to OWASP LLM risks, and presents the results through an interactive Streamlit dashboard.
 
-The project combines AI-generated prompt mutation, adaptive fuzzing, response analysis, risk scoring, multi-LLM evaluation, and security reporting into a single workflow.
+The project combines **AI-generated prompt mutation, adaptive fuzzing, response analysis, risk scoring, multi-LLM evaluation, and security reporting** into a single workflow.
 
-Purpose: Academic cybersecurity research and defensive evaluation of LLM robustness. Use only against models and systems you are authorized to test.
+> ⚠️ **Purpose:** Academic cybersecurity research and defensive evaluation of LLM robustness. Use only against models and systems you are authorized to test.
 
-✨ Key Features
+---
 
-🤖 AI-Powered Prompt Mutation
+## ✨ Features
 
-Generates variations of a seed prompt using multiple adversarial transformation techniques.
+### 🤖 AI-Powered Prompt Mutation
 
-Supported mutation operators include:
+Generates adversarial variations of seed prompts using multiple transformation techniques:
 
-Roleplay
+* Roleplay
+* Authority manipulation
+* Persona-based prompts
+* Context switching
+* Prompt leakage
+* Translation
+* Base64 encoding
+* ROT13
+* Unicode transformations
+* Typoglycemia
+* Markdown
+* XML
+* JSON
+* Indirect injection
+* Chain-of-thought-oriented transformations
 
-Authority / instruction manipulation
+A template-based mutation engine is also available as a fallback.
 
-Persona-based prompts
+---
 
-Context switching
+### 🧠 Adaptive Fuzzing
 
-Prompt leakage
+AutoFuzzLLM uses an **adaptive beam-search style workflow** to continuously explore promising mutations.
 
-Translation
-
-Base64 encoding
-
-ROT13
-
-Unicode transformations
-
-Typoglycemia
-
-Markdown
-
-XML
-
-JSON
-
-Indirect injection
-
-Chain-of-thought-oriented transformations
-
-The project also contains a template-based mutation engine that can act as a fallback.
-
-🧠 Adaptive Fuzzing
-
-The main fuzzing campaign uses an adaptive beam-search style workflow:
-
+```text
 Seed Prompt
-    ↓
+     ↓
 Generate Mutations
-    ↓
+     ↓
 Execute Against LLM
-    ↓
+     ↓
 Evaluate Response
-    ↓
-Assign Oracle Score
-    ↓
+     ↓
+Calculate Risk Score
+     ↓
 Add Mutation to Seed Pool
-    ↓
+     ↓
 Select Top-K Seeds
-    ↓
+     ↓
 Generate Next Generation
-    ↺
+     ↺
+```
 
-Higher-scoring mutations can be carried forward into subsequent generations, allowing the campaign to focus on more promising attack variants.
+High-scoring mutations can be carried forward into subsequent generations, allowing the fuzzing campaign to focus on more promising attack variants.
 
-🔌 Multi-LLM Support
+---
 
-The project provides an LLM router for:
+### 🔌 Multi-LLM Support
 
-Provider
+| Provider      | Integration           |
+| ------------- | --------------------- |
+| Google Gemini | Gemini API            |
+| Groq          | Groq API              |
+| OpenRouter    | OpenAI-compatible API |
+| Llama2        | Local Ollama server   |
 
-Integration
+The LLM routing layer keeps the fuzzing engine independent of individual model providers.
 
-Gemini
+---
 
-Google Gemini API
+### 🔍 Response & Risk Analysis
 
-Groq
+Responses are analyzed using multiple security-analysis components:
 
-Groq API
+* Rule-based response analysis
+* Keyword/signature-based risk scoring
+* Refusal detection
+* Response classification
+* OWASP LLM category mapping
+* Adaptive oracle scoring
+* Risk severity classification
 
-OpenRouter
+Risk levels include:
 
-OpenAI-compatible OpenRouter API
+* 🟢 **Low**
+* 🟡 **Medium**
+* 🔴 **Critical**
+* ⚠️ **Error**
 
-Llama2
+---
 
-Local Ollama server
+### 🛡️ OWASP LLM Mapping
 
-The architecture separates the fuzzing logic from individual model providers, making provider selection configurable.
+Attack categories are mapped to relevant OWASP LLM security risks, including:
 
-🔍 Response & Risk Analysis
+* Prompt Injection
+* Sensitive Information Disclosure
+* Improper Output Handling
+* Excessive Agency
+* System Prompt Leakage
 
-Responses are evaluated using several analysis components:
+---
 
-Rule-based response analysis
+### 📊 Interactive Streamlit Dashboard
 
-Keyword/signature-based risk scoring
+The project provides an interactive Streamlit interface with two major testing modes.
 
-Refusal detection
-
-Response classification
-
-OWASP LLM category mapping
-
-Adaptive oracle scoring
-
-Risk severity levels
-
-The risk scorer assigns a numerical score and categorizes results as:
-
-Low
-
-Medium
-
-Critical
-
-Error
-
-🛡️ OWASP LLM Mapping
-
-Attack categories are mapped to relevant OWASP LLM risk categories, including areas such as:
-
-Prompt Injection
-
-Sensitive Information Disclosure
-
-Improper Output Handling
-
-Excessive Agency
-
-System Prompt Leakage
-
-📊 Streamlit Dashboard
-
-The application provides two main interfaces:
-
-Batch Fuzzing Campaign
+#### Batch Fuzzing Campaign
 
 Configure:
 
-LLM providers
+* LLM providers
+* Built-in or custom seed prompts
+* Number of mutations
 
-Built-in or custom seed prompts
+View:
 
-Number of mutations
+* Mutated prompts
+* Model responses
+* Risk scores
+* Severity
+* OWASP mapping
+* Response time
+* Response length
+* Response classification
+* Campaign insights
+* Security recommendations
 
-Then view:
+#### 💬 Live Conversation Fuzzer
 
-Mutated prompts
+Test adversarial prompts interactively in a multi-turn conversation and observe the security assessment of model responses.
 
-Model responses
+---
 
-Risk scores
+### 💾 Campaign Database
 
-Severity
+Campaign information and results are stored using SQLite.
 
-OWASP mapping
+The database stores information such as:
 
-Response time
+* Campaign timestamp
+* Attack category
+* Seed prompt
+* Campaign results
+* Mutated prompts
+* Model responses
+* Risk information
 
-Response length
+---
 
-Classification
+### 📄 Security Reports
 
-Campaign insights
+Campaign results can be used to generate PDF security reports containing:
 
-Security recommendations
+* Executive summary
+* Models tested
+* Total tests
+* Average risk score
+* Model comparison
+* Most common attack category
+* Campaign metrics
+* Detailed findings
+* Security recommendations
+* Final security verdict
 
-💬 Live Conversation Fuzzer
+---
 
-Test adversarial prompts interactively in a multi-turn conversation and observe the live threat assessment of model responses.
+## 🏗️ Architecture
 
-💾 Campaign Database
-
-Campaign information and results are persisted using SQLite.
-
-The database stores:
-
-Campaign timestamp
-
-Attack category
-
-Seed prompt
-
-Campaign results
-
-Mutated prompts
-
-Model responses
-
-Risk information
-
-📄 Security Reports
-
-Campaign results can be used to generate a PDF security assessment containing:
-
-Executive summary
-
-Models tested
-
-Total tests
-
-Average risk score
-
-Model comparison
-
-Most common attack category
-
-Campaign metrics
-
-Detailed findings
-
-Security recommendations
-
-Final security verdict
-
-🏗️ System Architecture
-
+```mermaid
 flowchart TD
-    A[Streamlit Dashboard] --> B[Campaign Controller]
 
-    B --> C[Seed Prompt / Dataset]
-    C --> D[AI Mutator]
-    C --> E[Template Mutator]
+A[Streamlit Dashboard] --> B[Campaign Controller]
 
-    D --> F[Mutation Operators]
-    E --> F
+B --> C[Seed Prompt / Dataset]
 
-    F --> G[LLM Executor]
-    G --> H[LLM Router]
+C --> D[AI Mutator]
+C --> E[Template Mutator]
 
-    H --> I[Gemini]
-    H --> J[Groq]
-    H --> K[OpenRouter]
-    H --> L[Ollama / Llama2]
+D --> F[Mutation Operators]
+E --> F
 
-    G --> M[Model Response]
-    M --> N[Oracle Evaluation]
-    M --> O[Risk Scorer]
-    M --> P[Response Classifier]
-    M --> Q[Rule Engine]
+F --> G[LLM Executor]
 
-    N --> R[Seed Pool]
-    R --> D
+G --> H[LLM Router]
 
-    O --> S[OWASP Mapper]
-    P --> T[Dashboard Insights]
-    Q --> T
+H --> I[Gemini]
+H --> J[Groq]
+H --> K[OpenRouter]
+H --> L[Ollama / Llama2]
 
-    T --> U[SQLite Database]
-    T --> V[PDF Security Report]
+G --> M[Model Response]
 
-🔄 Fuzzing Workflow
+M --> N[Oracle Evaluation]
+M --> O[Risk Scorer]
+M --> P[Response Classifier]
+M --> Q[Rule Engine]
 
-Select a seed prompt
+N --> R[Seed Pool]
+
+R --> D
+
+O --> S[OWASP Mapper]
+
+P --> T[Dashboard Insights]
+Q --> T
+
+T --> U[SQLite Database]
+T --> V[PDF Security Report]
+```
+
+---
+
+## 🔄 How It Works
+
+### 1. Select a Seed Prompt
 
 Choose a prompt from the built-in dataset or enter a custom prompt.
 
-Generate adversarial mutations
+### 2. Generate Mutations
 
-The AI mutator and mutation operators create different versions of the seed.
+The AI mutator and mutation operators generate multiple adversarial variations of the seed prompt.
 
-Execute mutations
+### 3. Execute Against LLM
 
-Each mutated prompt is sent to the selected LLM provider.
+Each mutation is sent to the selected LLM provider.
 
-Evaluate the response
+### 4. Evaluate the Response
 
-The Oracle checks for leakage, jailbreak indicators, refusal behavior, reasoning indicators, and other response characteristics.
+The Oracle evaluates the model response for indicators such as:
 
-Calculate risk
+* Sensitive information leakage
+* Jailbreak behavior
+* Refusal behavior
+* Reasoning indicators
+* Suspicious response patterns
 
-The risk scorer analyzes potentially dangerous signatures and assigns a risk score.
+### 5. Calculate Risk
 
-Map the attack
+The risk-scoring engine analyzes the response and generates a numerical risk score.
 
-The attack category is mapped to an OWASP LLM risk category.
+### 6. Map to OWASP
 
-Update the seed pool
+The detected attack type is mapped to an appropriate OWASP LLM security category.
 
-Mutations receive scores and can become candidates for future generations.
+### 7. Update Seed Pool
 
-Beam selection
+Mutations are scored and promising mutations are added to the seed pool.
 
-The highest-scoring seeds are retained for the next generation.
+### 8. Adaptive Selection
 
-Generate insights
+The highest-scoring mutations are selected for subsequent generations.
 
-The dashboard summarizes model performance, attack distribution, and security posture.
+### 9. Generate Insights
 
-Store and report
+The dashboard provides statistics and insights about:
 
-Campaign data can be persisted in SQLite and exported into security reports.
+* Model performance
+* Attack categories
+* Risk distribution
+* Successful mutations
+* Security posture
 
-📁 Project Structure
+### 10. Store & Report
 
+Campaign results can be stored in SQLite and exported into a PDF security report.
+
+---
+
+## 📁 Project Structure
+
+```text
 AgenticAI/
 │
-├── app.py                         # Streamlit application entry point
-├── core_state.py                  # Application engine/state initialization
-├── fuzz_runner.py                 # Standalone fuzzing runner
-├── llm_mutator.py                 # LLM mutation utilities
-├── scorer.py                      # Scoring utilities
+├── app.py
+├── core_state.py
+├── fuzz_runner.py
+├── llm_mutator.py
+├── scorer.py
 │
 ├── analysis/
-│   ├── insights.py                # Campaign insight generation
-│   ├── owasp_mapper.py            # OWASP LLM category mapping
-│   ├── response_classifier.py     # Response classification
-│   ├── risk_score.py              # Risk scoring engine
-│   └── rule_engine.py             # Rule-based analysis
+│   ├── insights.py
+│   ├── owasp_mapper.py
+│   ├── response_classifier.py
+│   ├── risk_score.py
+│   └── rule_engine.py
 │
 ├── config/
-│   └── settings.py                # Environment/API configuration
+│   └── settings.py
 │
 ├── database/
-│   └── database.py                # SQLite campaign storage
+│   └── database.py
 │
 ├── datasets/
-│   └── seed_prompts.json          # Built-in seed prompt dataset
+│   └── seed_prompts.json
 │
 ├── fuzzing/
-│   ├── campaign.py                # Main adaptive fuzzing campaign
-│   ├── executor.py                # LLM execution layer
-│   ├── mutator.py                 # Template mutation engine
-│   ├── adaptive_campaign.py       # Adaptive campaign implementation
+│   ├── campaign.py
+│   ├── executor.py
+│   ├── mutator.py
+│   ├── adaptive_campaign.py
 │   │
 │   ├── attacks/
-│   │   └── base_attacks.py        # Base attack definitions
+│   │   └── base_attacks.py
 │   │
 │   ├── mutations/
-│   │   ├── ai_mutator.py          # AI-powered mutation generation
-│   │   └── operators/             # Adversarial mutation operators
+│   │   ├── ai_mutator.py
+│   │   └── operators/
 │   │
 │   ├── oracle/
-│   │   └── oracle.py              # Adaptive response oracle
+│   │   └── oracle.py
 │   │
 │   └── seed_pool/
-│       ├── seed.py                # Seed representation
-│       └── seed_pool.py           # Seed selection/storage
+│       ├── seed.py
+│       └── seed_pool.py
 │
 ├── llm/
-│   ├── llm_router.py              # Provider routing
-│   ├── gemini_client.py           # Gemini integration
-│   ├── groq_client.py             # Groq integration
-│   ├── openrouter_client.py       # OpenRouter integration
-│   └── ollama_client.py           # Local Ollama integration
+│   ├── llm_router.py
+│   ├── gemini_client.py
+│   ├── groq_client.py
+│   ├── openrouter_client.py
+│   └── ollama_client.py
 │
 ├── reports/
-│   └── report_generator.py        # PDF report generation
+│   └── report_generator.py
 │
 ├── pages/
-│   └── 1_Campaign_History.py      # Campaign history page
+│   └── 1_Campaign_History.py
 │
 ├── tabs/
-│   ├── batch_campaign.py          # Batch fuzzing UI
-│   └── live_fuzzer.py             # Live conversation fuzzer UI
+│   ├── batch_campaign.py
+│   └── live_fuzzer.py
 │
 ├── ui/
-│   ├── charts.py                  # Dashboard charts
-│   ├── insights.py                # Dashboard insights
-│   ├── explanations.py            # Result explanations
-│   └── dynamic_insights.py        # Dynamic UI insights
+│   ├── charts.py
+│   ├── insights.py
+│   ├── explanations.py
+│   └── dynamic_insights.py
 │
-├── datasets/
 ├── requirements.txt
-└── campaign_report.pdf            # Example/generated campaign report
+└── campaign_report.pdf
+```
 
-🛠️ Tech Stack
+---
 
-Python
+## 🛠️ Tech Stack
 
-Streamlit — interactive web dashboard
+* **Python**
+* **Streamlit** — Interactive web dashboard
+* **Google Gemini API** — Gemini integration
+* **Groq API** — LLM inference
+* **OpenRouter** — Multi-model LLM access
+* **Ollama** — Local LLM execution
+* **SQLite** — Campaign and result storage
+* **Pandas** — Data processing and analytics
+* **ReportLab** — PDF report generation
+* **python-dotenv** — Environment variable management
 
-Google Gemini API — Gemini model integration
+---
 
-Groq API — LLM inference
+## ⚙️ Installation
 
-OpenRouter — OpenAI-compatible multi-model access
+### 1. Clone the Repository
 
-Ollama — local LLM execution
-
-SQLite — campaign/result persistence
-
-Pandas — result processing and analytics
-
-ReportLab — PDF report generation
-
-python-dotenv — environment configuration
-
-⚙️ Installation
-
-1. Clone the repository
-
+```bash
 git clone https://github.com/ravinameena0805-lgtm/AgenticAI.git
 cd AgenticAI
+```
 
-2. Create a virtual environment
+### 2. Create a Virtual Environment
 
-Windows
+#### Windows
 
+```bash
 python -m venv venv
 venv\Scripts\activate
+```
 
-macOS / Linux
+#### macOS / Linux
 
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
-3. Install dependencies
+### 3. Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-The current code also imports groq and the OpenAI-compatible client used by OpenRouter. If they are not already installed in your environment, install them with:
+If required by your environment:
 
+```bash
 pip install groq openai
+```
 
-4. Configure API keys
+---
 
-Create a .env file in the project root:
+## 🔐 Environment Variables
 
+Create a `.env` file in the project root:
+
+```env
 GEMINI_API_KEY=your_gemini_api_key
 GROQ_API_KEY=your_groq_api_key
 OPENROUTER_API_KEY=your_openrouter_api_key
+```
 
-Do not commit your .env file or API keys to GitHub.
+> 🔒 **Never commit your API keys or `.env` file to GitHub.**
 
-🦙 Running Llama2 Locally with Ollama
+---
 
-The project can use a local Ollama endpoint:
+## 🦙 Local Llama2 with Ollama
 
+The project supports running Llama2 locally using Ollama.
+
+The application connects to:
+
+```text
 http://localhost:11434/api/chat
+```
 
-The configured local model is:
+The configured model is:
 
+```text
 llama2
+```
 
-Make sure Ollama is running and the model is available before selecting Llama2 in the dashboard.
+Make sure Ollama is running and the model is available before selecting Llama2.
 
-🚀 Run the Application
+---
 
-Start Streamlit from the project root:
+## 🚀 Running the Application
 
+Start the Streamlit application:
+
+```bash
 streamlit run app.py
+```
 
-Streamlit will display a local URL in the terminal. Open that URL in your browser.
+Then open the local URL displayed by Streamlit in your browser.
 
-🧪 Running Tests
+---
 
-The repository contains test files covering several components, including:
+## 🧪 Testing
 
+The project contains test scripts covering components such as:
+
+```text
 test_adaptive.py
 test_ai_mutator.py
 test_campaign.py
@@ -465,121 +463,125 @@ test_openrouter.py
 test_operator_manager.py
 test_oracle.py
 test_seed_pool.py
+```
 
-Run an individual test script with:
+Run an individual test:
 
+```bash
 python test_oracle.py
+```
 
-or another test file as required.
+Some integration tests require the relevant API provider or local Ollama service to be configured.
 
-Some integration tests require the corresponding LLM provider/API or local Ollama service to be configured.
+---
 
-📚 Built-in Dataset
+## 📚 Seed Prompt Dataset
 
-The project includes seed prompts in:
+Built-in seed prompts are stored in:
 
+```text
 datasets/seed_prompts.json
+```
 
-The current dataset contains categories such as:
+The dataset contains categories such as:
 
-Prompt Injection
+* Prompt Injection
+* Hallucination
+* Jailbreak
 
-Hallucination
+Custom prompts can also be entered directly through the Streamlit dashboard.
 
-Jailbreak
+---
 
-You can also provide a custom seed prompt directly from the Streamlit interface.
+## 📈 Risk Scoring
 
-📈 Risk Scoring
+The response risk scorer uses rule-based security indicators to generate a numerical score.
 
-The response risk scorer uses rule-based indicators to produce a numerical score.
+Examples of monitored indicators include:
 
-Examples of monitored signatures include:
+* Malware-related terms
+* Exploit-related terms
+* Credentials
+* API keys
+* Passwords
+* Secrets
+* System prompts
+* Developer messages
+* Tokens
 
-Malware-related terms
+### Severity Levels
 
-Exploit-related terms
-
-Credentials
-
-API keys
-
-Passwords
-
-Secrets
-
-System prompts
-
-Developer messages
-
-Tokens
-
-Additional scoring behavior considers response length and explicit refusal language.
-
-Severity
-
+```text
 Score < 35     → Low
 35–69          → Medium
 Score ≥ 70     → Critical
+```
 
-The scoring engine is intended as a heuristic security signal, not as a definitive vulnerability proof.
+The scoring system is intended as a **heuristic security signal**, not definitive proof of a vulnerability.
 
-🔎 Adaptive Oracle
+---
 
-The adaptive Oracle evaluates model responses using indicators such as:
+## 🔎 Adaptive Oracle
 
-Sensitive information leakage
+The adaptive Oracle evaluates responses using indicators including:
 
-Jailbreak indicators
+* Sensitive information leakage
+* Jailbreak indicators
+* Refusal behavior
+* Response length
+* Reasoning-related phrases
 
-Refusal behavior
+High-scoring mutations can become candidates for further adaptive exploration.
 
-Long responses
+---
 
-Reasoning-related phrases
+## 📊 Example Use Cases
 
-A sufficiently high oracle score marks a mutation as a successful/high-value candidate for adaptive exploration.
+AutoFuzzLLM can be used for:
 
-🛡️ Security & Responsible Use
+* LLM security research
+* Prompt-injection testing
+* Jailbreak robustness evaluation
+* Security benchmarking of LLM providers
+* System-prompt leakage testing
+* Comparative evaluation of multiple LLMs
+* Academic research
+* Red-team testing in authorized environments
+* Building LLM security regression tests
 
-AutoFuzzLLM is designed for authorized security testing and academic research.
+---
+
+## 🛡️ Responsible Use
+
+AutoFuzzLLM is intended for **authorized security testing and academic research**.
 
 Only test:
 
-Models you own
-
-Models you have permission to evaluate
-
-Authorized research environments
-
-Local test deployments
+* Models you own
+* Models you have permission to evaluate
+* Authorized research environments
+* Local test deployments
 
 Do not use the framework to attack third-party systems without authorization.
 
-The generated prompts are adversarial testing inputs; their presence in a test case does not mean the target model is actually vulnerable. Results should be manually reviewed and validated.
+Generated prompts are adversarial testing inputs. A flagged response should be manually reviewed and validated before being treated as a confirmed vulnerability.
 
-🔮 Future Improvements
+---
 
-Potential extensions include:
+## 🔮 Future Improvements
 
-More sophisticated semantic vulnerability detection
+Potential future improvements include:
 
-LLM-as-a-judge evaluation
+* Semantic vulnerability detection
+* LLM-as-a-Judge evaluation
+* More advanced adaptive mutation strategies
+* Multi-turn adaptive attack campaigns
+* Tool-use and agent security testing
+* Improved false-positive reduction
+* Automated security regression testing
+* Expanded OWASP LLM coverage
+* Additional LLM providers
+* Advanced campaign comparison
+* CI/CD integration for LLM security testing
 
-More adaptive mutation strategies
-
-Multi-turn adaptive attack campaigns
-
-Tool-use and agent security testing
-
-Better false-positive reduction
-
-Automated regression testing
-
-More comprehensive OWASP LLM coverage
-
-Additional LLM providers
-
-Richer campaign comparison dashboards
-
-CI/CD security testing integration
+---
